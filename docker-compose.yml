@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  batcontrol:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${BATCONTROL_VERSION:-0.5.7dev}
+        GIT_SHA: ${BATCONTROL_GIT_SHA:-snapshot}
+    container_name: batcontrol
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ:-Europe/Berlin}
+      - BATCONTROL_VERSION=${BATCONTROL_VERSION:-0.5.7dev}
+      - BATCONTROL_GIT_SHA=${BATCONTROL_GIT_SHA:-snapshot}
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+    networks:
+      - batcontrol-network
+    # Uncomment if you need to connect to host network (e.g., for local inverter access)
+    # network_mode: host
+
+  # Optional: MQTT broker service (uncomment if you need a local MQTT broker)
+  # mqtt:
+  #   image: eclipse-mosquitto:2.0
+  #   container_name: batcontrol-mqtt
+  #   restart: unless-stopped
+  #   ports:
+  #     - "1883:1883"
+  #     - "9001:9001"
+  #   volumes:
+  #     - ./mqtt/config:/mosquitto/config
+  #     - ./mqtt/data:/mosquitto/data
+  #     - ./mqtt/log:/mosquitto/log
+  #   networks:
+  #     - batcontrol-network
+
+networks:
+  batcontrol-network:
+    driver: bridge
+

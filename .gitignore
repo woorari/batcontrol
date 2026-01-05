@@ -86,6 +86,13 @@ instance/
 # Sphinx documentation
 docs/_build/
 
+# Ignore docs folder
+docs/
+
+# Generated load profile files (keep load_profile_default.csv)
+config/load_profile_*.csv
+config/load_profile.csv
+
 # PyBuilder
 .pybuilder/
 target/
